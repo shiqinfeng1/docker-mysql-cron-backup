@@ -20,14 +20,23 @@ services:
       - mariadb
     volumes:
       - ${VOLUME_PATH}/backup:/backup
+      - ${MYSQL_DATA_PATH}:/mysqldata
     environment:
-      - MYSQL_HOST=my_mariadb
-      - MYSQL_USER=root
-      - MYSQL_PASS=${MARIADB_ROOT_PASSWORD}
-      - MAX_BACKUPS=1
-      - INIT_BACKUP=1
-      - CRON_TIME=0 0 * * *
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_USER=${MYSQL_ROOT_USER}
+      - MYSQL_PASS=${MYSQL_ROOT_PASSWORD}
+      - MAX_BACKUPS=${MAX_BACKUPS}
+      - INIT_BACKUP=${INIT_BACKUP}
+      - CRON_TIME=${CRON_TIME} # 0 0 * * *
+      - CRON_TIME_RSYNC=${CRON_TIME_RSYNC} # 0 0 * * *
+      - BINLOG_DIR=/mysqldata/
+      - REMOTE_BACKUP_SSH_IP=${REMOTE_BACKUP_SSH_IP}
+      - REMOTE_BACKUP_SSH_PORT=${REMOTE_BACKUP_SSH_PORT}
+      - REMOTE_BACKUP_USER=${REMOTE_BACKUP_USER}
+      - REMOTE_BACKUP_PASS=${REMOTE_BACKUP_PASS}
+      - REMOTE_BACKUP_PATH=${REMOTE_BACKUP_PATH}
+      - REMOTE_BACKUP_BINLOG_PATH=${REMOTE_BACKUP_BINLOG_PATH}
     restart: unless-stopped
-  
-volumes: 
+
+volumes:
   data:

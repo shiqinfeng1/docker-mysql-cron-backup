@@ -165,3 +165,49 @@ docker container exec <your_mysql_backup_container_name> /restore.sh /backup/<yo
 ```
 
 if no database name is specified, `restore.sh` will try to find the database name from the backup file.
+
+
+# update
+增加远程备份的功能
+增加增量备份
+
+> 配置相关的backup服务器，创建相关备份文件夹，配置对应的环境变量
+cron配置如下：
+
+```
+minute   hour   day   month   week   command
+# For details see man 4 crontabs
+# Example of job definition:
+.---------------------------------- minute (0 - 59) 表示分钟
+|  .------------------------------- hour (0 - 23)   表示小时
+|  |  .---------------------------- day of month (1 - 31)   表示日期
+|  |  |  .------------------------- month (1 - 12) OR jan,feb,mar,apr ... 表示月份
+|  |  |  |  .---------------------- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat  表示星期（0 或 7 表示星期天）
+|  |  |  |  |  .------------------- username  以哪个用户来执行 
+|  |  |  |  |  |            .------ command  要执行的命令，可以是系统命令，也可以是自己编写的脚本文件
+|  |  |  |  |  |            |
+*  *  *  *  * user-name  command to be executed
+```
+
+```
+*/1 * * * * service httpd restart    每一分钟 重启httpd服务
+0 */1 * * * service httpd restart    每一小时 重启httpd服务
+30 21 * * * service httpd restart    每天 21：30 分 重启httpd服务
+26 4 1,5,23,28 * * service httpd restart    每月的1号，5号 23 号 28 号 的4点26分，重启httpd服务
+26 4 1-21 * * service httpd restart    每月的1号到21号 的4点26分，重启httpd服务
+*/2 * * * * service httpd restart    每隔两分钟 执行，偶数分钟 重启httpd服务
+1-59/2 * * * * service httpd restart    每隔两分钟 执行，奇数 重启httpd服务
+0 23-7/1 * * * service httpd restart    每天的晚上11点到早上7点 每隔一个小时 重启httpd服务
+0,30 18-23 * * * service httpd restart    每天18点到23点 每隔30分钟 重启httpd服务
+0-59/30 18-23 * * * service httpd restart    每天18点到23点 每隔30分钟 重启httpd服务
+59 1 1-7 4 * test 'date +\%w' -eq 0 && /root/a.sh    四月的第一个星期日 01:59 分运行脚本 /root/a.sh ，命令中的 test是判断，%w是数字的星期几
+30 21 * * * /usr/local/etc/rc.d/lighttpd restart  表示每晚的21:30重启lighttpd 。
+45 4 1,10,22 * * /usr/local/etc/rc.d/lighttpd restart 表示每月1、10、22日的4 : 45重启lighttpd 。
+10 1 * * 6,0 /usr/local/etc/rc.d/lighttpd restart 上面的例子表示每周六、周日的1 : 10重启lighttpd 。
+0,30 18-23 * * * /usr/local/etc/rc.d/lighttpd restart  上面的例子表示在每天18 : 00至23 : 00之间每隔30分钟重启lighttpd 。
+0 23 * * 6 /usr/local/etc/rc.d/lighttpd restart  上面的例子表示每星期六的11 : 00 pm重启lighttpd 。
+* */1 * * * /usr/local/etc/rc.d/lighttpd restart 每一小时重启lighttpd
+* 23-7/1 * * * /usr/local/etc/rc.d/lighttpd restart 晚上11点到早上7点之间，每隔一小时重启lighttpd
+0 11 4 * mon-wed /usr/local/etc/rc.d/lighttpd restart 每月的4号与每周一到周三的11点重启lighttpd
+0 4 1 jan * /usr/local/etc/rc.d/lighttpd restart 一月一号的4点重启lighttpd
+```
