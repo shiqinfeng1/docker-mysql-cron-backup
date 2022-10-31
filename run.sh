@@ -19,7 +19,11 @@ elif [ -n "${INIT_RESTORE_LATEST}" ]; then
 fi
 
 echo "${CRON_TIME} /backup.sh >> /backup/mysql_backup.log 2>&1" >> /tmp/crontab.conf
-echo "${CRON_TIME_RSYNC} /backup_mongo.sh >> /backup/mysql_backup.log 2>&1" >> /tmp/crontab.conf
+if [ -f /backup_mongo.sh ] 
+then 
+     echo "${CRON_TIME_RSYNC} /backup_mongo.sh >> /backup/mysql_backup.log 2>&1" >> /tmp/crontab.conf
+fi
+
 echo "${CRON_TIME_RSYNC} /backup_rsync_binlog.sh >> /backup/mysql_backup.log 2>&1" >> /tmp/crontab.conf
 echo "${CRON_TIME_RSYNC} /backup_rsync.sh >> /backup/mysql_backup.log 2>&1" >> /tmp/crontab.conf
 crontab /tmp/crontab.conf
