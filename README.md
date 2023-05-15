@@ -2,6 +2,20 @@
 
 Run mysqldump to backup your databases periodically using the cron task manager in the container. Your backups are saved in `/backup`. You can mount any directory of your host or a docker volumes in /backup. Othwerwise, a docker volume is created in the default location.
 
+## 优化与改动
+- 支持mongo数据库的定时备份
+- 支持密码登录方式远程同步备份mysql的备份数据
+- `Dockerfile-origin`为原始dockerfile文件
+- `Dockerfile-no-mongo`在原始dockerfile文件基础上，支持远程同步备份
+- `Dockerfile-origin`为原始dockerfile文件基础上，支持远程同步备份，并支持mongo数据库定时备份
+
+## 打包镜像
+```shell
+# 打包不带mongo的镜像
+docker build --tag jzsg/data-backup -f Dockerfile-no-mongo .
+# 打包带mongo的镜像
+docker build --tag jzsg/data-backup -f Dockerfile .
+```
 ## Usage:
 
 ```bash
