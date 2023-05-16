@@ -24,7 +24,7 @@ then
      echo "${CRON_TIME_RSYNC} /backup_mongo.sh >> /backup/mongo_backup.log 2>&1" >> /tmp/crontab.conf
 fi
 
-echo "${CRON_TIME_RSYNC} /backup_rsync_binlog.sh >> /backup/mysql_rsync_binlog.log 2>&1" >> /tmp/crontab.conf
+echo "${CRON_TIME_BINLOG_RSYNC} /backup_rsync_binlog.sh >> /backup/mysql_rsync_binlog.log 2>&1" >> /tmp/crontab.conf
 echo "${CRON_TIME_RSYNC} /backup_rsync.sh >> /backup/mysql_backup_rsync.log 2>&1" >> /tmp/crontab.conf
 crontab /tmp/crontab.conf
 
